@@ -27,9 +27,16 @@ DeepCopy implementations, and the generated CRD manifests. Controllers, the Helm
 installation instructions, and user documentation all live in
 [kai-resource-management](https://github.com/kai-scheduler/kai-resource-management).
 
-The API types are being introduced incrementally. This release contains the
-`kai.resources/v1alpha1` group registration; the resource types — **Project**,
-**Department**, **NodePool**, and **ManagedNodesConfig** — follow.
+## Resources
+
+`kai.resources/v1alpha1` defines four cluster-scoped resources:
+
+- **Project** — a quota-bearing organizational unit with its own namespace, queues, and
+  default node pools
+- **Department** — the parent grouping of projects, with its own queues
+- **NodePool** — a partition of cluster nodes identified by an immutable label pair,
+  together with its scheduling configuration
+- **ManagedNodesConfig** — cluster-wide selection of the nodes under management
 
 ## Installation
 
