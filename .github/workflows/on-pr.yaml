@@ -1,0 +1,53 @@
+# Copyright 2026 NVIDIA CORPORATION
+# SPDX-License-Identifier: Apache-2.0
+
+name: KAI Resource Management API - Pull Request
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+
+concurrency:
+  group: ${{ github.event_name == 'merge_group' && github.ref || github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-test:
+    # This name is the required status check in the branch ruleset. Keep it stable.
+    name: Validate & Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Set up Go
+        uses: actions/setup-go@v7
+        with:
+          # go.mod is the single source of truth for the Go version.
+          go-version-file: go.mod
+          cache: true
+
+      - name: Run validation
+        run: make validate
+
+      - name: Run tests
+        run: make test
+
+      # kai-resource-management consumes config/crd/ directly from the released
+      # module, so generated output that disagrees with the Go types ships to
+      # users. Checked with `git status --porcelain` rather than
+      # `git diff --exit-code`: a new API type produces a new *untracked* CRD
+      # file, which `git diff` does not report.
+      - name: Check generated output is up to date
+        run: |
+          make all
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Generated output is stale. Run 'make all' and commit the result."
+            git status --porcelain
+            git diff
+            exit 1
+          fi
