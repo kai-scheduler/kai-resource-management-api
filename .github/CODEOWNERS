@@ -1,0 +1,8 @@
+# Copyright 2026 NVIDIA CORPORATION
+# SPDX-License-Identifier: Apache-2.0
+
+# Every change requires review from a maintainer listed in MAINTAINERS.md.
+# Enforced by the "require review from Code Owners" rule on the main branch:
+# without it, an approval from any account with write access would be enough.
+
+* @natasharomm @barakle1 @edithgluck @gal-revach @keinanDaniel @moshe-runai @noiyemini

@@ -1,0 +1,16 @@
+# Tool binaries installed by the Makefile
+/bin/
+
+# Go
+*.test
+*.out
+/vendor/
+
+# Editors and local agent-harness state
+/.claude/
+/.codex/
+/.idea/
+/.vscode/
+
+# Operating systems
+.DS_Store
