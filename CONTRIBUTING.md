@@ -53,6 +53,16 @@ Record user-visible changes under `## [Unreleased]` in
 [CHANGELOG.md](CHANGELOG.md). There is no fragment tooling in this repository — edit the
 file directly.
 
+## Review and approval
+
+Every pull request needs at least one approving review from a code owner before it can
+be merged.
+
+Pull requests from external contributors are expected to carry approval from two trusted
+reviewers — organization members or repository collaborators. The `Check Approvals` job
+reports whether that threshold is met. It is advisory: it does not block merging on its
+own.
+
 ## Releasing
 
 Maintainers release by tagging `vX.Y.Z` on `main`; the Go module proxy serves it from
