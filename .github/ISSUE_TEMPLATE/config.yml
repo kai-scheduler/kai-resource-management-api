@@ -1,0 +1,13 @@
+# Copyright 2026 NVIDIA CORPORATION
+# SPDX-License-Identifier: Apache-2.0
+
+blank_issues_enabled: true
+contact_links:
+  - name: Report a bug or request a feature in KAI Resource Management
+    url: https://github.com/kai-scheduler/kai-resource-management/issues/new/choose
+    about: >-
+      This repository holds only the API types. Anything about resource management
+      behavior, installation, or the Helm chart belongs in the main repository.
+  - name: Report a security vulnerability
+    url: https://github.com/kai-scheduler/kai-resource-management-api/security/advisories/new
+    about: Security issues must be reported privately. See SECURITY.md.
