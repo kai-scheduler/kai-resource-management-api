@@ -9,3 +9,11 @@ Record user-visible changes under `## [Unreleased]` as part of the pull request 
 them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD` heading.
 
 ## [Unreleased]
+
+## [v0.1.0] - 2026-08-06
+
+### Added
+
+- Initial release of the `kai.resources/v1alpha1` API types — `Project`, `Department`,
+  `NodePool` and `ManagedNodesConfig` — with generated DeepCopy implementations and CRD
+  manifests.
