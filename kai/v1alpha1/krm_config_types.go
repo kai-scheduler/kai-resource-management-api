@@ -44,10 +44,12 @@ type KRMConfigList struct {
 
 // KRMConfigSpec is the desired state of the KAI Resource Management installation.
 //
-// Every optional field is a pointer so that "unset" stays distinguishable from the
-// zero value: the operator applies defaults imperatively on each reconcile rather
-// than through a defaulting webhook, and it must not mistake an explicit false or 0
-// for an absent field.
+// Optional fields whose zero value is itself a legitimate setting — booleans and
+// numbers — are pointers, so that "unset" stays distinguishable from an explicit
+// false or 0: the operator applies defaults imperatively on each reconcile rather
+// than through a defaulting webhook, and it must not mistake one for the other.
+// Optional strings are plain values, because an empty string is not a setting the
+// operator needs to tell apart from an absent field.
 type KRMConfigSpec struct {
 	// Namespace is where the operator deploys the KRM services. Defaults to the
 	// namespace the operator itself runs in, which is the Helm release namespace.
