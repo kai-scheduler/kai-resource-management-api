@@ -10,6 +10,19 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 ## [Unreleased]
 
+## [v0.1.1] - 2026-08-24
+
+### Added
+
+- `KRMConfig` — the cluster-scoped singleton that configures the KRM operator and the
+  services it deploys — together with the `NodePoolController`, `ProjectController` and
+  `PodGroupAssigner` types nested in its spec, and the generated
+  `config/crd/kai.resources_krmconfigs.yaml` manifest. These types were previously
+  defined in `kai-resource-management` while their shape settled; they now live with the
+  other `kai.resources` kinds.
+- `kai/v1alpha1/schedulingshardargs` — the KAI Scheduler CLI flag names used as keys in
+  `SchedulingShardConfig.Args`, mirrored here because KAI Scheduler does not export them.
+
 ## [v0.1.0] - 2026-08-06
 
 ### Added

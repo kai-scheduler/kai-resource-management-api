@@ -27,12 +27,19 @@ make all        # generate + manifests
 
 ## What belongs here
 
-**Include:** CRD type definitions for the `kai.resources` group, generated DeepCopy
+**Include:** CRD type definitions for the `kai.resources` group — including `KRMConfig`,
+the cluster-scoped singleton the KRM operator reconciles — generated DeepCopy
 implementations, generated CRD manifests, and public API constants or small helpers for
 working with the types.
 
-**Exclude:** controllers, webhooks, the Helm chart, deployment configuration, runtime
-configuration, and feature flags. Those live in `kai-resource-management`.
+**Exclude:** controllers, webhooks, the Helm chart, deployment configuration, and feature
+flags. Those live in `kai-resource-management`.
+
+A served type is part of the API contract even when its fields configure runtime
+behaviour, so `KRMConfig` belongs here: users read and write it with `kubectl`, and its
+schema is versioned and released like any other kind. The configuration that stays out is
+the kind that is never served — chart `values.yaml`, chart templates, and operator
+feature flags.
 
 This module may depend on sibling API modules such as `github.com/kai-scheduler/api`,
 but never on a service repository.

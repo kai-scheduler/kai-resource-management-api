@@ -29,7 +29,7 @@ installation instructions, and user documentation all live in
 
 ## Resources
 
-`kai.resources/v1alpha1` defines four cluster-scoped resources:
+`kai.resources/v1alpha1` defines five cluster-scoped resources:
 
 - **Project** — a quota-bearing organizational unit with its own namespace, queues, and
   default node pools
@@ -37,6 +37,12 @@ installation instructions, and user documentation all live in
 - **NodePool** — a partition of cluster nodes identified by an immutable label pair,
   together with its scheduling configuration
 - **ManagedNodesConfig** — cluster-wide selection of the nodes under management
+- **KRMConfig** — the singleton that configures the KRM operator and the services it
+  deploys; only the instance named `krm-config` is reconciled
+
+The `kai/v1alpha1/schedulingshardargs` package holds the KAI Scheduler CLI flag names
+used as keys in `SchedulingShardConfig.Args`. KAI Scheduler does not export them, so they
+are mirrored here as the accepted contract and travel with the NodePool types.
 
 ## Installation
 
