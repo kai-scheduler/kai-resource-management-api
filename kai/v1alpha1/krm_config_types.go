@@ -1,26 +1,12 @@
 // Copyright 2026 NVIDIA CORPORATION
 // SPDX-License-Identifier: Apache-2.0
 
-// TEMPORARY: these types belong in github.com/kai-scheduler/kai-resource-management-api
-// alongside the other kai.resources kinds, and this repository normally defines no
-// CRDs at all. They live here only while the shape of KRMConfig settles through
-// review. Once it has, a follow-up moves them to kai/v1alpha1 in the API module and
-// deletes this package, the generated CRD manifest under
-// deployments/kai-resource-management-chart/templates/krm-operator/, and the
-// gen-krmconfig Makefile target. See docs/updating-the-api-module.md.
-//
-// Package v1alpha1 contains the KRMConfig API type: the cluster-scoped, singleton
-// resource the KRM operator reconciles.
-// +kubebuilder:object:generate=true
-// +groupName=kai.resources
 package v1alpha1
 
 import (
-	kaicommon "github.com/kai-scheduler/api/kai/v1/common"
+	kaicommon "github.com/kai-scheduler/KAI-scheduler/pkg/apis/kai/v1/common"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"sigs.k8s.io/controller-runtime/pkg/scheme"
 )
 
 const (
@@ -31,21 +17,6 @@ const (
 	// KRMConfigKind is needed explicitly because a typed object read back from the
 	// API server carries no TypeMeta, and owner references are built from the Kind.
 	KRMConfigKind = "KRMConfig"
-)
-
-var (
-	// GroupVersion is the group version used to register these objects.
-	//
-	// TEMPORARY: deliberately a local SchemeBuilder rather than the API module's, so
-	// that removing this package is a plain delete. The group/version match the API
-	// module on purpose — KRMConfig does not exist there yet, so no kind collides.
-	GroupVersion = schema.GroupVersion{Group: "kai.resources", Version: "v1alpha1"}
-
-	// SchemeBuilder is used to add go types to the GroupVersionKind scheme.
-	SchemeBuilder = &scheme.Builder{GroupVersion: GroupVersion}
-
-	// AddToScheme adds the types in this group-version to the given scheme.
-	AddToScheme = SchemeBuilder.AddToScheme
 )
 
 // +kubebuilder:object:root=true
@@ -278,36 +249,36 @@ type KRMConfigStatus struct {
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 }
 
-// ConditionType enumerates the conditions the operator reports.
-type ConditionType string
+// KRMConfigConditionType enumerates the conditions the operator reports.
+type KRMConfigConditionType string
 
 const (
-	// ConditionTypeReconciling is true while a reconcile is in flight.
-	ConditionTypeReconciling ConditionType = "Reconciling"
-	// ConditionTypeDeployed is true once every desired object exists.
-	ConditionTypeDeployed ConditionType = "Deployed"
-	// ConditionTypeAvailable is true once every deployed workload reports available.
-	ConditionTypeAvailable ConditionType = "Available"
-	// ConditionTypeDependenciesFulfilled is true when nothing the installation needs is missing.
-	ConditionTypeDependenciesFulfilled ConditionType = "DependenciesFulfilled"
-	// ConditionTypeReady summarizes the above.
-	ConditionTypeReady ConditionType = "Ready"
+	// KRMConfigConditionTypeReconciling is true while a reconcile is in flight.
+	KRMConfigConditionTypeReconciling KRMConfigConditionType = "Reconciling"
+	// KRMConfigConditionTypeDeployed is true once every desired object exists.
+	KRMConfigConditionTypeDeployed KRMConfigConditionType = "Deployed"
+	// KRMConfigConditionTypeAvailable is true once every deployed workload reports available.
+	KRMConfigConditionTypeAvailable KRMConfigConditionType = "Available"
+	// KRMConfigConditionTypeDependenciesFulfilled is true when nothing the installation needs is missing.
+	KRMConfigConditionTypeDependenciesFulfilled KRMConfigConditionType = "DependenciesFulfilled"
+	// KRMConfigConditionTypeReady summarizes the above.
+	KRMConfigConditionTypeReady KRMConfigConditionType = "Ready"
 )
 
-// ConditionReason enumerates the reasons attached to the conditions above.
-type ConditionReason string
+// KRMConfigConditionReason enumerates the reasons attached to the conditions above.
+type KRMConfigConditionReason string
 
 const (
-	ReasonDeployed              ConditionReason = "Deployed"
-	ReasonNotDeployed           ConditionReason = "NotDeployed"
-	ReasonAvailable             ConditionReason = "Available"
-	ReasonNotAvailable          ConditionReason = "NotAvailable"
-	ReasonReconciled            ConditionReason = "Reconciled"
-	ReasonReconciling           ConditionReason = "Reconciling"
-	ReasonReady                 ConditionReason = "Ready"
-	ReasonNotReady              ConditionReason = "NotReady"
-	ReasonDependenciesFulfilled ConditionReason = "DependenciesFulfilled"
-	ReasonDependenciesMissing   ConditionReason = "DependenciesMissing"
+	KRMConfigReasonDeployed              KRMConfigConditionReason = "Deployed"
+	KRMConfigReasonNotDeployed           KRMConfigConditionReason = "NotDeployed"
+	KRMConfigReasonAvailable             KRMConfigConditionReason = "Available"
+	KRMConfigReasonNotAvailable          KRMConfigConditionReason = "NotAvailable"
+	KRMConfigReasonReconciled            KRMConfigConditionReason = "Reconciled"
+	KRMConfigReasonReconciling           KRMConfigConditionReason = "Reconciling"
+	KRMConfigReasonReady                 KRMConfigConditionReason = "Ready"
+	KRMConfigReasonNotReady              KRMConfigConditionReason = "NotReady"
+	KRMConfigReasonDependenciesFulfilled KRMConfigConditionReason = "DependenciesFulfilled"
+	KRMConfigReasonDependenciesMissing   KRMConfigConditionReason = "DependenciesMissing"
 )
 
 // GetSecurityContext returns nil on OpenShift, which assigns the UID range itself

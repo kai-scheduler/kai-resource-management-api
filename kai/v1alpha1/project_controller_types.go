@@ -4,7 +4,7 @@
 package v1alpha1
 
 import (
-	kaicommon "github.com/kai-scheduler/api/kai/v1/common"
+	kaicommon "github.com/kai-scheduler/KAI-scheduler/pkg/apis/kai/v1/common"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
