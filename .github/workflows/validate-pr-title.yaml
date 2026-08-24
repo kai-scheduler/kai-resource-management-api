@@ -35,6 +35,7 @@ jobs:
             nodepool
             project
             department
+            krmconfig
             ci
             release
             docs
