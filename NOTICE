@@ -1,0 +1,40 @@
+# KAI Resource Management API
+Copyright 2026 NVIDIA CORPORATION
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+project except in compliance with the License. A copy of the License is distributed with
+this project in the LICENSE file, and is also available at
+http://www.apache.org/licenses/LICENSE-2.0.
+
+## Derived code
+
+The base code for `.github/scripts/dco_check.py` was derived from
+christophebedard/dco-check, which is licensed under the Apache License, Version 2.0.
+Copyright (c) 2020 Christophe Bedard.
+This project includes components derived from christophebedard/dco-check, originally
+developed by the christophebedard/dco-check Authors.
+
+`CODE_OF_CONDUCT.md` is adapted from the CNCF Code of Conduct.
+Copyright (c) The Cloud Native Computing Foundation.
+
+## Third-party dependencies
+
+This module vendors no third-party source. It distributes only the Kubernetes API types
+for the `kai.resources` API group, their generated DeepCopy implementations, and the
+generated CRD manifests — all original works of NVIDIA CORPORATION.
+
+The Go modules this project builds against are declared in `go.mod` and are resolved by
+consumers from their own upstream sources, under their own licenses. They are neither
+redistributed nor modified here.
+
+---
+
+To obtain source code for software provided under licenses that require redistribution of
+source code, including GPL, LGPL, AGPL, MPL, EPL - contact oss-requests@nvidia.com.
+This offer is valid for a period of three (3) years from the date of the distribution of
+this product by NVIDIA CORPORATION.
+
+---
+
+This NOTICE file is provided for informational purposes. It does not modify any license
+agreements or legal obligations associated with the project components.

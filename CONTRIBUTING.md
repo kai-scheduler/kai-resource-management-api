@@ -14,7 +14,8 @@ Read the [Code of Conduct](CODE_OF_CONDUCT.md) and the
 
 ## Getting started
 
-1. Fork and clone the repository.
+1. Clone the repository. Maintainers with push access branch directly on it; everyone
+   else forks first.
 2. Create a focused branch from `main`.
 3. Make the change, including tests where the behavior is not generated.
 4. Run `make all` and commit any regenerated output.
@@ -30,10 +31,12 @@ DeepCopy implementations and CRD manifests are generated. After changing API typ
 
 ```bash
 make all
-git diff --exit-code
+git status --porcelain
 ```
 
-A non-empty diff means the committed generated output does not match the Go types.
+Any output means the committed generated output does not match the Go types. This uses
+`git status` rather than `git diff` because a new API type produces a new *untracked* CRD
+manifest, which `git diff` does not report.
 `kai-resource-management` consumes `config/crd/` directly from the released module, so
 that mismatch ships to users.
 
@@ -51,7 +54,8 @@ git commit -s -m "feat(project): add deletionType to ProjectSpec"
 
 Record user-visible changes under `## [Unreleased]` in
 [CHANGELOG.md](CHANGELOG.md). There is no fragment tooling in this repository — edit the
-file directly.
+file directly. The `Validate Changelog` check enforces this; a maintainer applies the
+`skip-changelog` label to pull requests that change nothing users would notice.
 
 ## Review and approval
 
