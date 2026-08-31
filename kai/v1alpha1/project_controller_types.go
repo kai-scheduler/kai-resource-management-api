@@ -126,18 +126,6 @@ type ProjectControllerFeatures struct {
 	// +optional
 	CreateRoleBindings *bool `json:"createRoleBindings,omitempty"`
 
-	// ClusterWideSecret replicates cluster-wide Secrets into project namespaces.
-	// +optional
-	ClusterWideSecret *bool `json:"clusterWideSecret,omitempty"`
-
-	// ClusterWideConfigMap replicates cluster-wide ConfigMaps into project namespaces.
-	// +optional
-	ClusterWideConfigMap *bool `json:"clusterWideConfigMap,omitempty"`
-
-	// ClusterWidePvc replicates cluster-wide PersistentVolumeClaims into project namespaces.
-	// +optional
-	ClusterWidePvc *bool `json:"clusterWidePvc,omitempty"`
-
 	// LimitRange manages a LimitRange in every project namespace.
 	// +optional
 	LimitRange *bool `json:"limitRange,omitempty"`

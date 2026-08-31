@@ -10,6 +10,11 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 ## [Unreleased]
 
+### Removed
+
+- The unused `clusterWideSecret`, `clusterWideConfigMap` and `clusterWidePvc` fields from
+  `ProjectControllerFeatures`.
+
 ## [v0.1.1] - 2026-08-24
 
 ### Added

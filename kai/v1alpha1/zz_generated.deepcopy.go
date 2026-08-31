@@ -1245,21 +1245,6 @@ func (in *ProjectControllerFeatures) DeepCopyInto(out *ProjectControllerFeatures
 		*out = new(bool)
 		**out = **in
 	}
-	if in.ClusterWideSecret != nil {
-		in, out := &in.ClusterWideSecret, &out.ClusterWideSecret
-		*out = new(bool)
-		**out = **in
-	}
-	if in.ClusterWideConfigMap != nil {
-		in, out := &in.ClusterWideConfigMap, &out.ClusterWideConfigMap
-		*out = new(bool)
-		**out = **in
-	}
-	if in.ClusterWidePvc != nil {
-		in, out := &in.ClusterWidePvc, &out.ClusterWidePvc
-		*out = new(bool)
-		**out = **in
-	}
 	if in.LimitRange != nil {
 		in, out := &in.LimitRange, &out.LimitRange
 		*out = new(bool)
