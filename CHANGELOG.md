@@ -10,6 +10,11 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 ## [Unreleased]
 
+### Added
+
+- `ProjectRoleBinding.bindProjectServiceAccount` — bind the service account of the
+  project's own namespace instead of the installation namespace.
+
 ### Removed
 
 - The unused `clusterWideSecret`, `clusterWideConfigMap` and `clusterWidePvc` fields from
