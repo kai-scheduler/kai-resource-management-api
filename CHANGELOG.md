@@ -14,6 +14,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 - `ProjectRoleBinding.bindProjectServiceAccount` — bind the service account of the
   project's own namespace instead of the installation namespace.
+- `ProjectControllerFeatures.allowExternalQueues` — leave Queues that no Project or
+  Department owns untouched.
 
 ### Removed
 
