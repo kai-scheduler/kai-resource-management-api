@@ -135,6 +135,14 @@ type ProjectControllerFeatures struct {
 	// LimitRange manages a LimitRange in every project namespace.
 	// +optional
 	LimitRange *bool `json:"limitRange,omitempty"`
+
+	// AllowExternalQueues declares that the cluster holds Queues KRM did not create, such as
+	// a hierarchy built before KRM was installed. The controller then updates or deletes only
+	// a Queue whose owner reference names the Project or Department being reconciled, and a
+	// Project or Department whose queue name such a Queue holds gets a suffixed name instead.
+	// Unset, every Queue is taken to be KRM's, and one without an owner is adopted.
+	// +optional
+	AllowExternalQueues *bool `json:"allowExternalQueues,omitempty"`
 }
 
 // ProjectControllerArgs are the project-controller's own command line flags.
