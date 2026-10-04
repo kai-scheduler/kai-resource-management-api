@@ -264,6 +264,11 @@ func (in *GlobalConfig) DeepCopyInto(out *GlobalConfig) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.AllowExternalQueues != nil {
+		in, out := &in.AllowExternalQueues, &out.AllowExternalQueues
+		*out = new(bool)
+		**out = **in
+	}
 	if in.ReplicaCount != nil {
 		in, out := &in.ReplicaCount, &out.ReplicaCount
 		*out = new(int32)
@@ -1249,11 +1254,6 @@ func (in *ProjectControllerFeatures) DeepCopyInto(out *ProjectControllerFeatures
 	}
 	if in.LimitRange != nil {
 		in, out := &in.LimitRange, &out.LimitRange
-		*out = new(bool)
-		**out = **in
-	}
-	if in.AllowExternalQueues != nil {
-		in, out := &in.AllowExternalQueues, &out.AllowExternalQueues
 		*out = new(bool)
 		**out = **in
 	}

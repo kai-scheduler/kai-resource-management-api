@@ -139,6 +139,16 @@ type GlobalConfig struct {
 	// +optional
 	EnforceSchedulerAnnotationKey *string `json:"enforceSchedulerAnnotationKey,omitempty"`
 
+	// AllowExternalQueues declares that the cluster holds Queues KRM did not create, such as
+	// a hierarchy built before KRM was installed. project-controller then updates or deletes
+	// only a Queue whose owner reference names the Project or Department being reconciled,
+	// and a Project or Department whose queue name such a Queue holds gets a suffixed name
+	// instead. pod-group-assigner leaves alone a PodGroup that does not resolve to a KRM
+	// project and queue, so workloads outside KRM keep their queue. Unset, every Queue is
+	// taken to be KRM's, and one without an owner is adopted.
+	// +optional
+	AllowExternalQueues *bool `json:"allowExternalQueues,omitempty"`
+
 	// ReplicaCount is the default replica count for services that do not set their own.
 	// +optional
 	ReplicaCount *int32 `json:"replicaCount,omitempty"`
