@@ -17,6 +17,12 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 - `GlobalConfig.allowExternalQueues` — leave Queues that no Project or Department owns,
   and the PodGroups that use them, untouched.
 
+### Changed
+
+- Embedded KAI Scheduler types now come from `github.com/kai-scheduler/api` (v0.1.4) instead of
+  `github.com/kai-scheduler/KAI-scheduler`. CRD manifests are unchanged; Go consumers must
+  import the same types from the api module.
+
 ### Removed
 
 - The unused `clusterWideSecret`, `clusterWideConfigMap` and `clusterWidePvc` fields from
