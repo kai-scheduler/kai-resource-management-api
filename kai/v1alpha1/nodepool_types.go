@@ -127,6 +127,18 @@ type TimeBasedFairShare struct {
 	// most users leave this unset.
 	// +optional
 	Sampling *FairShareSampling `json:"sampling,omitempty"`
+
+	// ConnectionString is the address of the Prometheus that usage is read from.
+	// Unset uses the scheduler's cluster-wide Prometheus. Maps to shard
+	// usageDBConfig.connectionString.
+	// +optional
+	ConnectionString *string `json:"connectionString,omitempty"`
+
+	// ExtraParams are passed unchanged to the usage-DB client, for example custom
+	// metric queries such as gpuCapacityMetric. Keys left unset get the controller's
+	// defaults. Maps to shard usageDBConfig.usageParams.extraParams.
+	// +optional
+	ExtraParams map[string]string `json:"extraParams,omitempty"`
 }
 
 // FairShareWindow defines the time window used for usage aggregation.

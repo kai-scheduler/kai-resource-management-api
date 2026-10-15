@@ -154,11 +154,25 @@ spec:
                       TimeBasedFairShare configures usage-aware fairness for the nodepool.
                       The controller compiles this into the shard's kValue + usageDBConfig.
                     properties:
+                      connectionString:
+                        description: |-
+                          ConnectionString is the address of the Prometheus that usage is read from.
+                          Unset uses the scheduler's cluster-wide Prometheus. Maps to shard
+                          usageDBConfig.connectionString.
+                        type: string
                       enabled:
                         description: |-
                           Enabled activates usage-aware fairness. When false, scheduling uses current
                           queue state only.
                         type: boolean
+                      extraParams:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          ExtraParams are passed unchanged to the usage-DB client, for example custom
+                          metric queries such as gpuCapacityMetric. Keys left unset get the controller's
+                          defaults. Maps to shard usageDBConfig.usageParams.extraParams.
+                        type: object
                       halfLifePeriod:
                         description: |-
                           HalfLifePeriod is the half-life of past usage. 0 = no decay (all history weighted equally).

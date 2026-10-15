@@ -16,6 +16,9 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
   project's own namespace instead of the installation namespace.
 - `GlobalConfig.allowExternalQueues` — leave Queues that no Project or Department owns,
   and the PodGroups that use them, untouched.
+- `TimeBasedFairShare.connectionString` and `TimeBasedFairShare.extraParams` — set the
+  usage-DB Prometheus address and client parameters (such as custom metric queries) per
+  node pool.
 
 ### Changed
 
