@@ -127,6 +127,15 @@ type TimeBasedFairShare struct {
 	// most users leave this unset.
 	// +optional
 	Sampling *FairShareSampling `json:"sampling,omitempty"`
+
+	// ConnectionString is the usage db address. Maps to shard usageDBConfig.connectionString.
+	// +optional
+	ConnectionString *string `json:"connectionString,omitempty"`
+
+	// ExtraParams are extra parameters for the usage db client, which are client specific.
+	// Maps to shard usageDBConfig.usageParams.extraParams.
+	// +optional
+	ExtraParams map[string]string `json:"extraParams,omitempty"`
 }
 
 // FairShareWindow defines the time window used for usage aggregation.
