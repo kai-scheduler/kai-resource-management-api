@@ -19,6 +19,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 - `TimeBasedFairShare.connectionString` and `TimeBasedFairShare.extraParams` — set the
   usage-DB Prometheus address and client parameters (such as custom metric queries) per
   node pool.
+- `NodePoolControllerArgs.schedulerNamespace` — write per-shard ServiceMonitors into the
+  KAI Scheduler's namespace when it differs from `spec.namespace`.
 
 ### Changed
 

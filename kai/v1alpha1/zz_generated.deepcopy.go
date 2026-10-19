@@ -695,6 +695,11 @@ func (in *NodePoolControllerArgs) DeepCopyInto(out *NodePoolControllerArgs) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.SchedulerNamespace != nil {
+		in, out := &in.SchedulerNamespace, &out.SchedulerNamespace
+		*out = new(string)
+		**out = **in
+	}
 	if in.SchedulingShardArgs != nil {
 		in, out := &in.SchedulingShardArgs, &out.SchedulingShardArgs
 		*out = new(string)
