@@ -99,6 +99,12 @@ type NodePoolControllerArgs struct {
 	// +optional
 	DcgmExporterNamespace *string `json:"dcgmExporterNamespace,omitempty"`
 
+	// SchedulerNamespace is the namespace of the KAI Scheduler, where per-shard
+	// ServiceMonitors are written. Empty means spec.namespace. It must match where
+	// the scheduler actually runs; nothing checks it.
+	// +optional
+	SchedulerNamespace *string `json:"schedulerNamespace,omitempty"`
+
 	// SchedulingShardArgs is a JSON-encoded map of cluster-wide KAI scheduler args
 	// merged into every SchedulingShard the controller writes. Empty means no
 	// overrides, so each shard runs on the scheduler's own defaults.
