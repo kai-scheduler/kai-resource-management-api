@@ -21,6 +21,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
   node pool.
 - `NodePoolControllerArgs.schedulerNamespace` — write per-shard ServiceMonitors into the
   KAI Scheduler's namespace when it differs from `spec.namespace`.
+- `DepartmentSpec.parent` — nest a department under another department. A department cannot
+  be its own parent.
 
 ### Changed
 

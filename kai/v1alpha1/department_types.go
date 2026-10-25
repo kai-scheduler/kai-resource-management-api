@@ -12,6 +12,10 @@ import (
 
 // DepartmentSpec defines the desired state of Department
 type DepartmentSpec struct {
+	// The parent department of the department. Empty for a top-level department.
+	// +optional
+	Parent string `json:"parent,omitempty"`
+
 	// Department's queues
 	Queues []QueueConfig `json:"queues"`
 }
@@ -27,6 +31,7 @@ type DepartmentStatus struct {
 //+kubebuilder:subresource:status
 //+kubebuilder:resource:scope=Cluster
 //+kubebuilder:storageversion
+//+kubebuilder:validation:XValidation:rule="!has(self.spec) || !has(self.spec.parent) || self.spec.parent != self.metadata.name",message="a department cannot be its own parent"
 
 // Department is the Schema for the departments API
 type Department struct {
