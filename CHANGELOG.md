@@ -23,6 +23,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
   KAI Scheduler's namespace when it differs from `spec.namespace`.
 - `DepartmentSpec.parent` — nest a department under another department. A department cannot
   be its own parent.
+- `QueueConfig.minRuntime` — set `preemptMinRuntime` and `reclaimMinRuntime` on a project's or
+  department's queue, overriding the node pool's minimum runtime.
 
 ### Changed
 

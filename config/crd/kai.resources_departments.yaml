@@ -52,6 +52,22 @@ spec:
                 description: Department's queues
                 items:
                   properties:
+                    minRuntime:
+                      description: |-
+                        Minimum runtime of a workload in this queue before it can be preempted or reclaimed.
+                        Unset, the value comes from the parent department's queue, then from the node pool.
+                      properties:
+                        preemptMinRuntime:
+                          description: How long a workload runs before a higher-priority
+                            workload may preempt it, such as "5m".
+                          pattern: ^(0|([0-9]+(\.[0-9]+)?(ns|us|ms|s|m|h))+)$
+                          type: string
+                        reclaimMinRuntime:
+                          description: How long a workload runs before another queue
+                            may reclaim the quota it borrowed, such as "10m".
+                          pattern: ^(0|([0-9]+(\.[0-9]+)?(ns|us|ms|s|m|h))+)$
+                          type: string
+                      type: object
                     name:
                       description: Queue name
                       type: string
