@@ -26,6 +26,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 ### Changed
 
+- `SchedulingShardConfig.minRuntime` rejects a `preemptMinRuntime` or `reclaimMinRuntime` that is not
+  a duration such as `5m`. KAI Scheduler used to ignore such a value and fall back to 0s.
 - Embedded KAI Scheduler types now come from `github.com/kai-scheduler/api` (v0.1.4) instead of
   `github.com/kai-scheduler/KAI-scheduler`. CRD manifests are unchanged; Go consumers must
   import the same types from the api module.
