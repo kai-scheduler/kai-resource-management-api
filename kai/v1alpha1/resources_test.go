@@ -4,7 +4,6 @@
 package v1alpha1
 
 import (
-	"encoding/json"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -12,6 +11,7 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	"github.com/xhit/go-str2duration/v2"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"sigs.k8s.io/yaml"
 )
@@ -46,17 +46,19 @@ var _ = Describe("Queue minRuntime", func() {
 					Expect(pattern.MatchString(value)).To(Equal(accepted), name)
 				}
 				if accepted {
-					// Whatever the schema accepts must decode, or the controller cannot read the object.
-					data, err := json.Marshal(map[string]string{"preemptMinRuntime": value, "reclaimMinRuntime": value})
+					// Consumers parse these values with str2duration, so every value the schema
+					// accepts must parse.
+					_, err := str2duration.ParseDuration(value)
 					Expect(err).NotTo(HaveOccurred())
-					Expect(json.Unmarshal(data, &QueueMinRuntime{})).To(Succeed())
 				}
 			},
 			Entry("accepts minutes", "5m", true),
 			Entry("accepts combined units", "1h30m", true),
 			Entry("accepts a fraction", "1.5h", true),
 			Entry("accepts zero", "0", true),
-			Entry("rejects days, which Go durations lack", "1d", false),
+			Entry("accepts days", "2d", true),
+			Entry("accepts weeks", "1w", true),
+			Entry("rejects an unknown unit", "1y", false),
 			Entry("rejects a negative duration", "-5m", false),
 			Entry("rejects words", "5 minutes", false),
 		)

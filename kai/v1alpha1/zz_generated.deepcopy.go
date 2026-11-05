@@ -1514,12 +1514,12 @@ func (in *QueueMinRuntime) DeepCopyInto(out *QueueMinRuntime) {
 	*out = *in
 	if in.PreemptMinRuntime != nil {
 		in, out := &in.PreemptMinRuntime, &out.PreemptMinRuntime
-		*out = new(metav1.Duration)
+		*out = new(string)
 		**out = **in
 	}
 	if in.ReclaimMinRuntime != nil {
 		in, out := &in.ReclaimMinRuntime, &out.ReclaimMinRuntime
-		*out = new(metav1.Duration)
+		*out = new(string)
 		**out = **in
 	}
 }
