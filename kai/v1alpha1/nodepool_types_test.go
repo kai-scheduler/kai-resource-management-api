@@ -18,7 +18,10 @@ import (
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	structuralschema "k8s.io/apiextensions-apiserver/pkg/apiserver/schema"
 	"k8s.io/apiextensions-apiserver/pkg/apiserver/schema/cel"
+	"k8s.io/apiextensions-apiserver/pkg/apiserver/schema/cel/model"
 	"k8s.io/apimachinery/pkg/util/validation/field"
+	celconfig "k8s.io/apiserver/pkg/apis/cel"
+	"k8s.io/apiserver/pkg/cel/environment"
 	"sigs.k8s.io/yaml"
 )
 
@@ -121,5 +124,74 @@ var _ = Describe("NodePool labelKey/labelValue immutability CRD rule", func() {
 	It("rejects adding a label pair to the default nodepool", func() {
 		allowed, _ := evaluateSpecRule(rule, labelsAbsent, labelsGPUA100)
 		Expect(allowed).To(BeFalse(), "adding a pair to the default nodepool must be rejected")
+	})
+})
+
+// staticEstimatedCostLimit is apiextensions validation.StaticEstimatedCostLimit, the highest estimated
+// cost the API server accepts for one CRD rule. Importing it would pull the API server into go.mod.
+const staticEstimatedCostLimit = 10000000
+
+// minRuntimeSchemaFromCRD returns the schema of schedulingShardConfig.minRuntime as it ships.
+func minRuntimeSchemaFromCRD() *structuralschema.Structural {
+	data, err := os.ReadFile(filepath.Clean(crdPath))
+	Expect(err).NotTo(HaveOccurred())
+
+	var crd apiextensionsv1.CustomResourceDefinition
+	Expect(yaml.Unmarshal(data, &crd)).To(Succeed())
+	Expect(crd.Spec.Versions).To(HaveLen(1))
+
+	props := &apiextensions.JSONSchemaProps{}
+	Expect(apiextensionsv1.Convert_v1_JSONSchemaProps_To_apiextensions_JSONSchemaProps(
+		crd.Spec.Versions[0].Schema.OpenAPIV3Schema, props, nil)).To(Succeed())
+	s, err := structuralschema.NewStructural(props)
+	Expect(err).NotTo(HaveOccurred())
+	minRuntime := s.Properties["spec"].Properties["schedulingShardConfig"].Properties["minRuntime"]
+	return &minRuntime
+}
+
+var _ = Describe("NodePool minRuntime CRD rules", func() {
+	var s *structuralschema.Structural
+
+	BeforeEach(func() {
+		s = minRuntimeSchemaFromCRD()
+	})
+
+	It("compiles within the API server's cost limit", func() {
+		results, err := cel.Compile(s, model.SchemaDeclType(s, false), celconfig.PerCallLimit,
+			environment.MustBaseEnvSet(environment.DefaultCompatibilityVersion()), cel.StoredExpressionsEnvLoader())
+		Expect(err).NotTo(HaveOccurred())
+		Expect(results).To(HaveLen(2))
+		for _, result := range results {
+			Expect(result.Error).To(BeNil())
+			Expect(result.MaxCost).To(BeNumerically("<=", staticEstimatedCostLimit))
+		}
+	})
+
+	DescribeTable("validates both values as durations",
+		func(value string, accepted bool) {
+			obj := map[string]interface{}{"preemptMinRuntime": value, "reclaimMinRuntime": value}
+			errs, _ := cel.NewValidator(s, false, celconfig.PerCallLimit).
+				Validate(context.Background(), field.NewPath("minRuntime"), s, obj, nil, celconfig.RuntimeCELCostBudget)
+			if accepted {
+				Expect(errs).To(BeEmpty())
+			} else {
+				Expect(errs).To(HaveLen(2))
+			}
+		},
+		Entry("accepts minutes", "5m", true),
+		Entry("accepts combined units", "1h30m", true),
+		Entry("accepts a fraction", "1.5h", true),
+		Entry("accepts zero", "0", true),
+		Entry("accepts days, which KAI parses as 24h", "2d", true),
+		Entry("accepts weeks", "1w", true),
+		Entry("rejects an unknown unit", "1y", false),
+		Entry("rejects a negative duration", "-5m", false),
+		Entry("rejects words", "5 minutes", false),
+	)
+
+	It("accepts a minRuntime with neither value set", func() {
+		errs, _ := cel.NewValidator(s, false, celconfig.PerCallLimit).
+			Validate(context.Background(), field.NewPath("minRuntime"), s, map[string]interface{}{}, nil, celconfig.RuntimeCELCostBudget)
+		Expect(errs).To(BeEmpty())
 	})
 })
