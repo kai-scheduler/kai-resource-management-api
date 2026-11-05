@@ -40,7 +40,6 @@ type QueueConfig struct {
 	Priority *int32 `json:"priority,omitempty"`
 
 	// Minimum runtime of a workload in this queue before it can be preempted or reclaimed.
-	// Unset, the value comes from the parent department's queue, then from the node pool.
 	// +optional
 	MinRuntime *QueueMinRuntime `json:"minRuntime,omitempty"`
 }
@@ -49,11 +48,15 @@ type QueueConfig struct {
 // Values use the node pool's duration format, where d is 24h and w is 7d.
 type QueueMinRuntime struct {
 	// How long a workload runs before a higher-priority workload may preempt it, such as "5m" or "2d".
+	// Unset, the value comes from the parent department's queue, then from the node pool.
 	// +optional
 	// +kubebuilder:validation:Pattern=`^(0|([0-9]+(\.[0-9]+)?(ns|us|ms|s|m|h|d|w))+)$`
 	PreemptMinRuntime *string `json:"preemptMinRuntime,omitempty"`
 
 	// How long a workload runs before another queue may reclaim the quota it borrowed, such as "10m".
+	// With KAI Scheduler's default "lca" resolution, a project's value applies only when a sibling
+	// project in the same department reclaims; a reclaim from another department uses the
+	// department's value. Unset, the value comes from the parent queues, then from the node pool.
 	// +optional
 	// +kubebuilder:validation:Pattern=`^(0|([0-9]+(\.[0-9]+)?(ns|us|ms|s|m|h|d|w))+)$`
 	ReclaimMinRuntime *string `json:"reclaimMinRuntime,omitempty"`
