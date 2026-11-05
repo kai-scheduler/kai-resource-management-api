@@ -81,10 +81,10 @@ type SchedulingShardConfig struct {
 	QueueDepthPerAction map[string]int `json:"queueDepthPerAction,omitempty"`
 
 	// MinRuntime specifies the minimum guaranteed runtime before a job can be preempted or reclaimed.
-	// Each value is a duration such as "5m".
+	// Each value is a duration such as "5m", "1h30m" or "2d"; d is 24h and w is 7d.
 	// +optional
-	// +kubebuilder:validation:XValidation:rule="!has(self.preemptMinRuntime) || self.preemptMinRuntime.matches('^(0|([0-9]+([.][0-9]+)?(ns|us|ms|s|m|h))+)$')",message="preemptMinRuntime must be a duration such as 5m"
-	// +kubebuilder:validation:XValidation:rule="!has(self.reclaimMinRuntime) || self.reclaimMinRuntime.matches('^(0|([0-9]+([.][0-9]+)?(ns|us|ms|s|m|h))+)$')",message="reclaimMinRuntime must be a duration such as 10m"
+	// +kubebuilder:validation:XValidation:rule="!has(self.preemptMinRuntime) || self.preemptMinRuntime.matches('^(0|([0-9]+([.][0-9]+)?(ns|us|ms|s|m|h|d|w))+)$')",message="preemptMinRuntime must be a duration such as 5m"
+	// +kubebuilder:validation:XValidation:rule="!has(self.reclaimMinRuntime) || self.reclaimMinRuntime.matches('^(0|([0-9]+([.][0-9]+)?(ns|us|ms|s|m|h|d|w))+)$')",message="reclaimMinRuntime must be a duration such as 10m"
 	MinRuntime *kaiv1.MinRuntime `json:"minRuntime,omitempty"`
 
 	// Plugins allows overriding plugin configuration. Keys are plugin names.

@@ -182,7 +182,9 @@ var _ = Describe("NodePool minRuntime CRD rules", func() {
 		Entry("accepts combined units", "1h30m", true),
 		Entry("accepts a fraction", "1.5h", true),
 		Entry("accepts zero", "0", true),
-		Entry("rejects days, which KAI cannot parse", "1d", false),
+		Entry("accepts days, which KAI parses as 24h", "2d", true),
+		Entry("accepts weeks", "1w", true),
+		Entry("rejects an unknown unit", "1y", false),
 		Entry("rejects a negative duration", "-5m", false),
 		Entry("rejects words", "5 minutes", false),
 	)
