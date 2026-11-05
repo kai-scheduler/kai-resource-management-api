@@ -59,13 +59,11 @@ file directly. The `Validate Changelog` check enforces this; a maintainer applie
 
 ## Review and approval
 
-Every pull request needs at least one approving review from a code owner before it can
-be merged.
+Every pull request needs at least one approving review before it can be merged.
 
-Pull requests from external contributors are expected to carry approval from two trusted
-reviewers — organization members or repository collaborators. The `Check Approvals` job
-reports whether that threshold is met. It is advisory: it does not block merging on its
-own.
+Pull requests from external contributors need approval from two trusted reviewers —
+organization members or repository collaborators — before they can be merged. The
+required `Check Approvals` job enforces this.
 
 ## Releasing
 
