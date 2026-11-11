@@ -211,8 +211,8 @@ type GlobalConfig struct {
 	ServiceMonitor *ServiceMonitorSpec `json:"serviceMonitor,omitempty"`
 
 	// PrometheusRule configures the recording rules for node pool, project and
-	// department metrics. Enabling it without the Prometheus operator installed is
-	// not an error: the operator skips the PrometheusRule while its CRD is absent.
+	// department metrics. If the Prometheus operator is not installed, KRM skips
+	// the PrometheusRule instead of failing.
 	// +optional
 	PrometheusRule *PrometheusRuleSpec `json:"prometheusRule,omitempty"`
 }
@@ -235,9 +235,9 @@ type ServiceMonitorSpec struct {
 // PrometheusRuleSpec configures the recording rules for node pool, project and
 // department metrics.
 type PrometheusRuleSpec struct {
-	// Enabled creates one PrometheusRule with the recording rules in the KRM
-	// namespace, and makes the project-controller export the metrics the rules
-	// need. A platform that records these metrics itself leaves it off.
+	// Enabled makes KRM create a PrometheusRule with the recording rules in its
+	// own namespace, and makes the project-controller export the extra metrics
+	// those rules use. Leave it off if your platform already records these metrics.
 	// +optional
 	Enabled *bool `json:"enabled,omitempty"`
 
