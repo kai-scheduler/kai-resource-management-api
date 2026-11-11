@@ -25,6 +25,8 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
   be its own parent.
 - `QueueConfig.minRuntime` — set `preemptMinRuntime` and `reclaimMinRuntime` on a project's or
   department's queue, overriding the node pool's minimum runtime.
+- `GlobalConfig.prometheusRule` — create a PrometheusRule with recording rules for node pool,
+  project and department metrics, with labels for a Prometheus `ruleSelector`.
 
 ### Changed
 
