@@ -105,7 +105,8 @@ manifest does not depend on which repository generated it.
 ## Versioning and releases
 
 Follows [Semantic Versioning](https://semver.org/); `v0.x` until the contract is declared
-stable. A release is a `vX.Y.Z` tag on `main` — the Go module proxy serves it from there.
+stable. A release is a `vX.Y.Z` tag on `main`, created by the release workflow (see
+[CONTRIBUTING.md](CONTRIBUTING.md#releasing)) — the Go module proxy serves it from there.
 Consumers bump with:
 
 ```bash

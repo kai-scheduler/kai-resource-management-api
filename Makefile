@@ -44,6 +44,10 @@ generate: $(CONTROLLER_GEN) ## Generate DeepCopy implementations.
 manifests: $(CONTROLLER_GEN) ## Generate CRD manifests into config/crd.
 	$(CONTROLLER_GEN) crd:allowDangerousTypes=true,generateEmbeddedObjectMeta=true,headerFile="./hack/boilerplate.yaml.txt" paths="./kai/..." output:crd:artifacts:config=config/crd
 
+.PHONY: changelog-release
+changelog-release: ## Move the Unreleased changelog entries under VERSION (vX.Y.Z).
+	hack/changelog-release.sh "$(VERSION)"
+
 $(LOCALBIN):
 	mkdir -p $(LOCALBIN)
 

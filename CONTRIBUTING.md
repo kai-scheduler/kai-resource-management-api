@@ -67,9 +67,14 @@ required `Check Approvals` job enforces this.
 
 ## Releasing
 
-Maintainers release by tagging `vX.Y.Z` on `main`; the Go module proxy serves it from
-there. Move the `## [Unreleased]` entries under the new version heading in the same
-commit.
+Maintainers release by running the **Release — Prepare Changelog** workflow on `main`
+with the version, e.g. `v0.1.10`. It opens a PR that moves the `## [Unreleased]` entries
+under the new version heading, and merges it once checks pass. Merging it tags the merge
+commit and creates the GitHub Release; the Go module proxy serves the module from the tag.
+
+Do not push release tags by hand: the tag must point at the commit that holds the version's
+changelog section. `make changelog-release VERSION=vX.Y.Z` runs the same changelog step
+locally.
 
 ## Reporting issues
 
