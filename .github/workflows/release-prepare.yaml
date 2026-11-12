@@ -1,0 +1,125 @@
+# Copyright 2026 NVIDIA CORPORATION
+# SPDX-License-Identifier: Apache-2.0
+
+# Release, step 1 of 2 — Prepare Changelog (manual dispatch).
+#
+# Moves the "## [Unreleased]" entries in CHANGELOG.md under a new "## [VERSION]" heading and
+# opens a PR against main. The PR approves and merges itself once its checks pass, when it
+# changes nothing but CHANGELOG.md; anything else waits for a maintainer. Merging it triggers
+# release-publish.yaml (step 2), which tags that commit and creates the GitHub Release.
+#
+# Mirrors release-prepare.yaml in kai-resource-management, without changelog fragments or
+# release branches: this module releases from main only.
+
+name: Release — Prepare Changelog
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release, e.g. v0.1.10'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  prepare:
+    name: Move changelog entries & open PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require main
+        env:
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          if [ "$REF_NAME" != main ]; then
+            echo "::error::Run this workflow on main, not on '$REF_NAME'."
+            exit 1
+          fi
+
+      - name: Checkout main
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+          token: ${{ secrets.KAIBOT_TOKEN }}
+
+      - name: Require a version newer than the latest tag
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
+            echo "::error::Tag $VERSION already exists."
+            exit 1
+          fi
+          latest="$(git tag --list 'v*.*.*' | sort -V | tail -n1)"
+          if [ -n "$latest" ] && [ "$(printf '%s\n%s\n' "$latest" "$VERSION" | sort -V | tail -n1)" != "$VERSION" ]; then
+            echo "::error::$VERSION is not newer than the latest tag, $latest."
+            exit 1
+          fi
+
+      - name: Move Unreleased entries under the version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: make changelog-release VERSION="$VERSION"
+
+      - name: Open release PR
+        env:
+          GH_TOKEN: ${{ secrets.KAIBOT_TOKEN }}
+          APPROVER_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          BRANCH="release/prepare-$VERSION"
+
+          git config --local user.name "kai-release-bot"
+          git config --local user.email "action@github.com"
+
+          git switch -c "$BRANCH"
+          git add CHANGELOG.md
+          git commit -s -m "chore(release): prepare changelog for $VERSION"
+          git push --force-with-lease -u origin "$BRANCH"
+
+          BODY="${RUNNER_TEMP:-/tmp}/pr-body.md"
+          {
+            echo "Automated by the **Release — Prepare Changelog** workflow."
+            echo
+            echo "Moves the \`## [Unreleased]\` entries in \`CHANGELOG.md\` under \`## [$VERSION]\`."
+            echo
+            echo "**Merging this PR** triggers \`release-publish.yaml\`, which tags \`$VERSION\` on the merge commit and creates the GitHub Release from this changelog section."
+          } > "$BODY"
+
+          gh pr create \
+            --base main \
+            --head "$BRANCH" \
+            --title "chore(release): prepare changelog for $VERSION" \
+            --label skip-changelog \
+            --body-file "$BODY"
+
+          # Merges without a person, so only the commit pushed above, and only
+          # if it changes nothing but the changelog: anything else needs a
+          # maintainer.
+          sha="$(git rev-parse HEAD)"
+          pr="$(gh pr view "$BRANCH" --json number,headRefOid,files)"
+          if [ "$(jq -r .headRefOid <<<"$pr")" != "$sha" ]; then
+            echo "::warning::The pull request head is no longer $sha; leaving it for a maintainer."
+            exit 0
+          fi
+          for file in $(jq -r '.files[].path' <<<"$pr"); do
+            if [ "$file" != CHANGELOG.md ]; then
+              echo "::warning::$file is not the changelog; leaving the pull request for a maintainer."
+              exit 0
+            fi
+          done
+
+          # Approved by github-actions and merged with KAIBOT_TOKEN: the author
+          # cannot approve their own pull request, and a merge made with
+          # GITHUB_TOKEN would not trigger release-publish.yaml.
+          number="$(jq -r .number <<<"$pr")"
+          GH_TOKEN="$APPROVER_TOKEN" gh api --method POST \
+            "repos/$GITHUB_REPOSITORY/pulls/$number/reviews" \
+            -f event=APPROVE -f commit_id="$sha" >/dev/null
+          gh pr merge "$number" --auto --squash --match-head-commit "$sha"

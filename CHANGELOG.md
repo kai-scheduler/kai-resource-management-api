@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Record user-visible changes under `## [Unreleased]` as part of the pull request that makes
-them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD` heading.
+them. The release workflow moves them under a new `## [vX.Y.Z] - YYYY-MM-DD` heading.
 
 ## [Unreleased]
 
