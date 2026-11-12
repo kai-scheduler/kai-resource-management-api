@@ -1047,6 +1047,26 @@ spec:
                     description: ProjectLabelKey is the label key carrying a workload's
                       project.
                     type: string
+                  prometheusRule:
+                    description: |-
+                      PrometheusRule configures the recording rules for node pool, project and
+                      department metrics. If the Prometheus operator is not installed, KRM skips
+                      the PrometheusRule instead of failing.
+                    properties:
+                      enabled:
+                        description: |-
+                          Enabled makes KRM create a PrometheusRule with the recording rules in its
+                          own namespace, and makes the project-controller export the extra metrics
+                          those rules use. Leave it off if your platform already records these metrics.
+                        type: boolean
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: |-
+                          Labels are added to the PrometheusRule, so a Prometheus ruleSelector can
+                          select it.
+                        type: object
+                    type: object
                   queueLabelKey:
                     description: |-
                       QueueLabelKey is the label key carrying a workload's queue.

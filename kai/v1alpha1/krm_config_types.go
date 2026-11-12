@@ -209,6 +209,12 @@ type GlobalConfig struct {
 	// the ServiceMonitor while its CRD is absent.
 	// +optional
 	ServiceMonitor *ServiceMonitorSpec `json:"serviceMonitor,omitempty"`
+
+	// PrometheusRule configures the recording rules for node pool, project and
+	// department metrics. If the Prometheus operator is not installed, KRM skips
+	// the PrometheusRule instead of failing.
+	// +optional
+	PrometheusRule *PrometheusRuleSpec `json:"prometheusRule,omitempty"`
 }
 
 // ServiceMonitorSpec configures Prometheus scraping of the KRM services.
@@ -224,6 +230,21 @@ type ServiceMonitorSpec struct {
 	// false, and harmless where no accounting Prometheus is deployed.
 	// +optional
 	Accounting *bool `json:"accounting,omitempty"`
+}
+
+// PrometheusRuleSpec configures the recording rules for node pool, project and
+// department metrics.
+type PrometheusRuleSpec struct {
+	// Enabled makes KRM create a PrometheusRule with the recording rules in its
+	// own namespace, and makes the project-controller export the extra metrics
+	// those rules use. Leave it off if your platform already records these metrics.
+	// +optional
+	Enabled *bool `json:"enabled,omitempty"`
+
+	// Labels are added to the PrometheusRule, so a Prometheus ruleSelector can
+	// select it.
+	// +optional
+	Labels map[string]string `json:"labels,omitempty"`
 }
 
 // PortMapping is one named port, published on Port and served on TargetPort.
