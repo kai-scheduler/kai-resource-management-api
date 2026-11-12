@@ -10,19 +10,10 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 
 ## [Unreleased]
 
+## [v0.1.9] - 2026-11-05
+
 ### Added
 
-- `ProjectRoleBinding.bindProjectServiceAccount` — bind the service account of the
-  project's own namespace instead of the installation namespace.
-- `GlobalConfig.allowExternalQueues` — leave Queues that no Project or Department owns,
-  and the PodGroups that use them, untouched.
-- `TimeBasedFairShare.connectionString` and `TimeBasedFairShare.extraParams` — set the
-  usage-DB Prometheus address and client parameters (such as custom metric queries) per
-  node pool.
-- `NodePoolControllerArgs.schedulerNamespace` — write per-shard ServiceMonitors into the
-  KAI Scheduler's namespace when it differs from `spec.namespace`.
-- `DepartmentSpec.parent` — nest a department under another department. A department cannot
-  be its own parent.
 - `QueueConfig.minRuntime` — set `preemptMinRuntime` and `reclaimMinRuntime` on a project's or
   department's queue, overriding the node pool's minimum runtime.
 
@@ -31,9 +22,52 @@ them. At release time, move those entries under a new `## [vX.Y.Z] - YYYY-MM-DD`
 - `SchedulingShardConfig.minRuntime` rejects a `preemptMinRuntime` or `reclaimMinRuntime` that is not
   a duration such as `5m` or `2d`, for example `5 minutes` or `-5m`. KAI Scheduler used to ignore such a
   value and fall back to 0s.
+
+## [v0.1.8] - 2026-10-25
+
+### Added
+
+- `DepartmentSpec.parent` — nest a department under another department. A department cannot
+  be its own parent.
+
+## [v0.1.7] - 2026-10-19
+
+### Added
+
+- `NodePoolControllerArgs.schedulerNamespace` — write per-shard ServiceMonitors into the
+  KAI Scheduler's namespace when it differs from `spec.namespace`.
+
+## [v0.1.6] - 2026-10-15
+
+### Added
+
+- `TimeBasedFairShare.connectionString` and `TimeBasedFairShare.extraParams` — set the
+  usage-DB Prometheus address and client parameters (such as custom metric queries) per
+  node pool.
+
+## [v0.1.5] - 2026-10-05
+
+### Changed
+
 - Embedded KAI Scheduler types now come from `github.com/kai-scheduler/api` (v0.1.4) instead of
   `github.com/kai-scheduler/KAI-scheduler`. CRD manifests are unchanged; Go consumers must
   import the same types from the api module.
+
+## [v0.1.4] - 2026-10-04
+
+### Added
+
+- `GlobalConfig.allowExternalQueues` — leave Queues that no Project or Department owns,
+  and the PodGroups that use them, untouched.
+
+## [v0.1.3] - 2026-09-20
+
+### Added
+
+- `ProjectRoleBinding.bindProjectServiceAccount` — bind the service account of the
+  project's own namespace instead of the installation namespace.
+
+## [v0.1.2] - 2026-09-01
 
 ### Removed
 
